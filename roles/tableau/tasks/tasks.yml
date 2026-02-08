@@ -1,0 +1,36 @@
+---
+- name: Verify Tableau RPM exists on master
+  stat:
+    path: /tmp/tableau-server.rpm
+  register: tableau_rpm
+
+- name: Fail if Tableau RPM is missing
+  fail:
+    msg: "Tableau RPM not found at /tmp/tableau-server.rpm"
+  when: not tableau_rpm.stat.exists
+
+- name: Install Tableau Server RPM
+  dnf:
+    name: /tmp/tableau-server.rpm
+    state: present
+    disable_gpg_check: true
+
+- name: Verify Tableau Server package installed
+  shell: rpm -qa | grep -i tableau
+  register: tableau_pkg
+  changed_when: false
+
+- name: Fail if Tableau Server installation failed
+  fail:
+    msg: "Tableau Server RPM installation failed"
+  when: tableau_pkg.stdout == ""
+
+- name: Verify Tableau install directory
+  stat:
+    path: /opt/tableau
+  register: tableau_dir
+
+- name: Fail if /opt/tableau is missing
+  fail:
+    msg: "/opt/tableau directory not found after installation"
+  when: not tableau_dir.stat.exists
