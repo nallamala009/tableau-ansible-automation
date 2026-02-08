@@ -3,4 +3,5 @@
   hosts: tableau_master
   become: true
   roles:
-    - tableau
+    - tableau_common
+    - tableau_primary
