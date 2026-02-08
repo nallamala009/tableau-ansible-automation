@@ -1,21 +1,6 @@
-- name: Install Tableau Server (All Nodes)
-  hosts: tableau_master:tableau_worker
-  become: true
-  roles:
-    - tableau
-
-- name: Initialize Tableau Master
+---
+- name: Install Tableau Server on Master
   hosts: tableau_master
   become: true
   roles:
     - tableau
-  tasks:
-    - import_tasks: roles/tableau/tasks/init_master.yml
-
-- name: Join Tableau Workers
-  hosts: tableau_worker
-  become: true
-  roles:
-    - tableau
-  tasks:
-    - import_tasks: roles/tableau/tasks/add_worker.yml
