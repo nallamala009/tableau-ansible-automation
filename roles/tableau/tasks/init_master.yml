@@ -1,26 +1,13 @@
-- name: Find initialize-tsm binary
-  find:
-    paths: /opt/tableau/tableau_server/packages
-    patterns: initialize-tsm
-    recurse: yes
-    file_type: file
-  register: initialize_tsm_bin
-
-- name: Fail if initialize-tsm not found
-  fail:
-    msg: "initialize-tsm binary not found under /opt/tableau/tableau_server/packages"
-  when: initialize_tsm_bin.matched == 0
-
-- name: Initialize Tableau Server
+- name: Initialize Tableau Server using tsm
   become: true
   command: >
-    {{ initialize_tsm_bin.files[0].path }}
+    /opt/tableau/tableau_server/packages/bin/tsm
+    initialize
     --accepteula
-    --admin-user {{ tableau_admin_user }}
-    --admin-password {{ tableau_admin_password }}
+    --username {{ tableau_admin_user }}
+    --password {{ tableau_admin_password }}
   args:
-    creates: /var/opt/tableau/tableau_server/.initialized
-
+    creates: /var/opt/tableau/tableau_server/.tsm_initialized
 
 - name: Start Tableau Server
   command: tsm start
