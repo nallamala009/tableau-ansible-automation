@@ -11,7 +11,7 @@
 
 - name: Install Tableau Server RPM
   dnf:
-    name: /tmp/tableau-server.rpm
+    name: /tmp/tableau-server-2025-3-2.x86_64.rpm
     state: present
     disable_gpg_check: true
 
