@@ -3,3 +3,4 @@ tableau_rpm: "tableau-server-2023-3-0.x86_64.rpm"
 tableau_install_dir: /opt/tableau
 tableau_admin_user: tableauadmin
 tableau_admin_password: "StrongAdmin@123"
+tableau_rpm: tableau-server-2023-3-0.x86_64.rpm
