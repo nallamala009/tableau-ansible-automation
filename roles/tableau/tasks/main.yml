@@ -1,36 +1,48 @@
 ---
-- name: Verify Tableau RPM exists on master
+# roles/tableau/tasks/main.yml
+
+- name: Ensure we are running on Rocky Linux 8
+  assert:
+    that:
+      - ansible_distribution == "Rocky"
+      - ansible_distribution_major_version == "8"
+    fail_msg: "This role supports only Rocky Linux 8"
+    success_msg: "Rocky Linux 8 detected"
+
+- name: Verify Tableau RPM exists on the host
   stat:
     path: /tmp/tableau-server-2025-3-2.x86_64.rpm
   register: tableau_rpm
 
 - name: Fail if Tableau RPM is missing
   fail:
-    msg: "Tableau RPM not found at /tmp/tableau-server-2025-3-2.x86_64.rpm"
+    msg: "Tableau Server RPM not found at /tmp/tableau-server.rpm"
   when: not tableau_rpm.stat.exists
 
-- name: Install Tableau Server RPM
+- name: Install Tableau Server RPM (Rocky Linux 8 – dnf4)
   dnf:
     name: /tmp/tableau-server-2025-3-2.x86_64.rpm
     state: present
     disable_gpg_check: true
+    use_backend: dnf4
 
 - name: Verify Tableau Server package installed
   shell: rpm -qa | grep -i tableau
   register: tableau_pkg
   changed_when: false
 
-- name: Fail if Tableau Server installation failed
+- name: Fail if Tableau Server package not installed
   fail:
     msg: "Tableau Server RPM installation failed"
-  when: tableau_pkg.stdout == ""
+  when: tableau_pkg.stdout | length == 0
 
-- name: Verify Tableau install directory
+- name: Verify Tableau install directory exists
   stat:
     path: /opt/tableau
   register: tableau_dir
 
-- name: Fail if /opt/tableau is missing
+- name: Fail if /opt/tableau directory is missing
   fail:
     msg: "/opt/tableau directory not found after installation"
   when: not tableau_dir.stat.exists
+
