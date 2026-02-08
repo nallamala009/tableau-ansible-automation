@@ -1,12 +1,12 @@
 ---
 - name: Verify Tableau RPM exists on master
   stat:
-    path: /tmp/tableau-server.rpm
+    path: /tmp/tableau-server-2025-3-2.x86_64.rpm
   register: tableau_rpm
 
 - name: Fail if Tableau RPM is missing
   fail:
-    msg: "Tableau RPM not found at /tmp/tableau-server.rpm"
+    msg: "Tableau RPM not found at /tmp/tableau-server-2025-3-2.x86_64.rpm"
   when: not tableau_rpm.stat.exists
 
 - name: Install Tableau Server RPM
