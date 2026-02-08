@@ -1,0 +1,9 @@
+- name: Copy Tableau RPM
+  copy:
+    src: files/{{ tableau_rpm }}
+    dest: /tmp/{{ tableau_rpm }}
+
+- name: Install Tableau Server
+  dnf:
+    name: /tmp/{{ tableau_rpm }}
+    state: present

@@ -1,0 +1,11 @@
+- name: Initialize Tableau Server
+  command: >
+    /opt/tableau/tableau_server/packages/scripts.*/initialize-tsm
+    --accepteula
+    --admin-user {{ tableau_admin_user }}
+    --admin-password {{ tableau_admin_password }}
+  args:
+    creates: /var/opt/tableau/tableau_server/.initialized
+
+- name: Start Tableau Server
+  command: tsm start

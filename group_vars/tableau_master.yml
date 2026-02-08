@@ -1,0 +1,8 @@
+tableau_node_role: master
+tableau_services:
+  - gateway
+  - vizportal
+  - vizqlserver
+  - backgrounder
+  - dataserver
+  - filestore

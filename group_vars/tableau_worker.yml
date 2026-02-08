@@ -1,0 +1,4 @@
+tableau_node_role: worker
+tableau_services:
+  - backgrounder
+  - dataserver

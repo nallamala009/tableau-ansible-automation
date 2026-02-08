@@ -1,0 +1,26 @@
+- name: Install OS prereqs
+  dnf:
+    name:
+      - curl
+      - wget
+      - tar
+      - unzip
+      - chrony
+      - firewalld
+      - libX11
+      - libXcomposite
+      - libXcursor
+      - libXdamage
+      - libXext
+      - libXi
+      - libXtst
+      - libXrandr
+      - mesa-libEGL
+      - mesa-libGL
+    state: present
+
+- name: Enable time sync
+  service:
+    name: chronyd
+    state: started
+    enabled: true
