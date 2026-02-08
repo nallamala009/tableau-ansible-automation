@@ -5,4 +5,4 @@ tableau_required_ports:
   - 8060
   - 8061
 
-tableau_rpm_path: /tmp/ableau-server-2025-3-2.x86_64.rpm
+tableau_rpm_path: /tmp/tableau-server-2025-3-2.x86_64.rpm
