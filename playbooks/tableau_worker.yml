@@ -1,0 +1,5 @@
+- hosts: tableau_workers
+  become: true
+  roles:
+    - tableau_common
+    - tableau_worker

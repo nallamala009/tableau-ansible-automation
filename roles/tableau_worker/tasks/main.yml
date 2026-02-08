@@ -1,0 +1,5 @@
+- name: Install Tableau Server RPM
+  dnf:
+    name: "{{ tableau_rpm_path }}"
+    state: present
+    disable_gpg_check: true

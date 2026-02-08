@@ -1,0 +1,48 @@
+- name: Assert Rocky Linux 8
+  assert:
+    that:
+      - ansible_distribution == "Rocky"
+      - ansible_distribution_major_version == "8"
+    fail_msg: "Tableau Server requires Rocky Linux 8.x"
+
+- name: Disable Transparent Huge Pages
+  shell: |
+    echo never > /sys/kernel/mm/transparent_hugepage/enabled
+    echo never > /sys/kernel/mm/transparent_hugepage/defrag
+  args:
+    executable: /bin/bash
+  changed_when: false
+
+- name: Install OS dependencies
+  dnf:
+    name:
+      - curl
+      - wget
+      - tar
+      - firewalld
+      - policycoreutils-python-utils
+    state: present
+
+- name: Enable and start firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Open Tableau firewall ports
+  firewalld:
+    port: "{{ item }}/tcp"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop: "{{ tableau_required_ports }}"
+
+- name: Verify Tableau RPM exists
+  stat:
+    path: "{{ tableau_rpm_path }}"
+  register: tableau_rpm
+
+- name: Fail if RPM missing
+  fail:
+    msg: "Tableau RPM not found at {{ tableau_rpm_path }}"
+  when: not tableau_rpm.stat.exists

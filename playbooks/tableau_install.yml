@@ -1,0 +1,9 @@
+- hosts: tableau_all
+  become: true
+  roles:
+    - tableau_common
+
+- hosts: tableau_primary
+  become: true
+  roles:
+    - tableau_primary
