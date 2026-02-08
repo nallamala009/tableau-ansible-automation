@@ -1,11 +1,36 @@
+- name: Fail if Tableau RPM variable is empty
+  fail:
+    msg: "tableau_rpm variable is not set"
+  when: tableau_rpm is not defined or tableau_rpm | length == 0
+
 - name: Copy Tableau Server RPM to target
   copy:
     src: "{{ tableau_rpm }}"
     dest: /tmp/{{ tableau_rpm }}
     mode: '0644'
 
+- name: Verify RPM exists on target
+  stat:
+    path: /tmp/{{ tableau_rpm }}
+  register: rpm_stat
+
+- name: Fail if RPM not copied
+  fail:
+    msg: "Tableau RPM not found at /tmp/{{ tableau_rpm }}"
+  when: not rpm_stat.stat.exists
+
 - name: Install Tableau Server RPM
   become: true
   dnf:
     name: /tmp/{{ tableau_rpm }}
     state: present
+
+- name: Verify Tableau RPM installed
+  shell: rpm -qa | grep -i tableau
+  register: tableau_rpm_check
+  changed_when: false
+
+- name: Fail if Tableau RPM not installed
+  fail:
+    msg: "Tableau Server RPM did not install successfully"
+  when: tableau_rpm_check.stdout | length == 0
