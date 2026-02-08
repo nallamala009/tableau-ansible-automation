@@ -1,6 +1,1 @@
-- name: Join worker to cluster
-  command: >
-    tsm topology nodes add
-    --node-name {{ inventory_hostname }}
-    --services {{ tableau_services | join(',') }}
-    --bootstrap-server {{ groups['tableau_master'][0] }}
+
